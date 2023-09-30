@@ -5,7 +5,10 @@ a = Analysis(
     ['auto-editor-frontend.py'],
     pathex=[],
     binaries=[],
-    datas=[('C:\Python311\Lib\site-packages', '.')],
+    datas=[
+        ('C:\\Python311\\Lib\\site-packages\\tkinterdnd2\\tkdnd\\win64', 'tkdnd'),
+        ('C:\\Python311\\Lib\\site-packages\\auto_editor', 'auto-editor')
+        ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
