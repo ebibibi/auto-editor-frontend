@@ -7,7 +7,8 @@ a = Analysis(
     binaries=[],
     datas=[
         ('C:\\Python311\\Lib\\site-packages\\tkinterdnd2\\tkdnd\\win64', 'tkdnd'),
-        ('C:\\Python311\\Lib\\site-packages\\auto_editor', 'auto-editor')
+        ('C:\\Python311\\Lib\\site-packages\\auto_editor', 'auto-editor'),
+        ('C:\\Python311\\Scripts\\auto-editor.exe', '.')
         ],
     hiddenimports=[],
     hookspath=[],

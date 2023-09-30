@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from tkinter import filedialog
 import subprocess
+import os
+import sys
+import shutil
 
 def drop(event):
     file_path = event.data.strip("{}")
@@ -17,19 +20,43 @@ def update_command_line_display():
     command_line_display.delete(1.0, tk.END)
     command_line_display.insert(tk.END, cmd)
 
+def get_auto_editor_path():
+    # Try to find auto-editor in the PATH
+    path_from_which = shutil.which("auto-editor")
+    if path_from_which:
+        return path_from_which
+    
+    # If not in PATH, check the current directory or bundled directory
+    return resource_path("auto-editor.exe")
+
+def is_bundled():
+    return getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
+
+def resource_path(relative_path):
+    if is_bundled():
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
 def run_auto_editor():
     video_file_path = file_path_var.get()
     margin_value = str(margin_scale.get() / 10)
     threshold_value = str(threshold_scale.get())
     export_value = export_option_var.get()
+
+    auto_editor_path = get_auto_editor_path()
+    print("auto_editor_path : " + auto_editor_path)
+    # auto-editor.exeが配置されているディレクトリを取得
+    auto_editor_dir = os.path.dirname(auto_editor_path)
+
     cmd = [
-        "cmd.exe", "/k",
-        "auto-editor", video_file_path,
+        auto_editor_path, video_file_path,
         "--margin", f"{margin_value}sec",
         "--edit", f"audio:threshold={threshold_value}%",
         "--export", export_value
     ]
-    subprocess.Popen(cmd)
+
+    # auto-editor.exeが配置されているディレクトリで実行するためのcwd引数を設定
+    subprocess.Popen(cmd, cwd=auto_editor_dir)
 
 root = TkinterDnD.Tk()
 root.title("auto-editor GUI")
